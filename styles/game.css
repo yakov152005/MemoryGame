@@ -15,6 +15,7 @@ body {
     margin-top: 10px;
 }
 
+
 @media screen and (max-width: 1200px) {
     .game-board {
         grid-template-columns: repeat(3, 1fr);
