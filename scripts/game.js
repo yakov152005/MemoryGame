@@ -14,7 +14,7 @@ import {
     MAX_PAIR,
     MAX_LEVEL,
     MIN_LEVEL,
-    MAX_FLIPPED
+    MAX_FLIPPED, TIMER_MOVE, TIMER_WIN, MILLI_SECOND
 } from "./constant.js";
 
 document.getElementById('backToMain').addEventListener(TEXT_2, () => {
@@ -22,7 +22,11 @@ document.getElementById('backToMain').addEventListener(TEXT_2, () => {
 });
 
 let flippedCards = [], matchedCards = [];
-let moves = document.getElementById('moves');
+let moves = 0;
+let minute = 0, second = 0;
+let timerStr = "00:00";
+let timerIntervalId, movesIntervalId;
+
 
 if (!USER_NAME
     || !PAIRS || isNaN(PAIRS)
@@ -70,6 +74,7 @@ function flipCard() {
 }
 
 function checkMatch() {
+    moves++;
     const [card1, card2] = flippedCards;
     if (card1.dataset.value === card2.dataset.value) {
         matchedCards.push(card1, card2);
@@ -78,10 +83,12 @@ function checkMatch() {
             setTimeout(() => {
                 alert("You win!" + '\n'
                     + " Moves: " + moves + '\n'
+                    + " Time: " + timerStr + '\n'
                     + " Username: " + USER_NAME
                 )
-            }, 500);
+            }, TIMER_WIN);
         }
+        clearInterval(timerIntervalId);
     } else {
         setTimeout(() => {
             notMatchedCard(card1, card2);
@@ -104,12 +111,56 @@ document.getElementById("restart").onclick = () => {
 function restartGame() {
     matchedCards = [];
     flippedCards = [];
+    restartMoves();
+    restartTimer();
     creatBoardGame();
 }
 
-document.addEventListener(TEXT_2, () => {
-    moves++;
-})
+function restartMoves() {
+    moves = 0;
+    document.getElementById('moves').innerHTML = moves;
+}
+
+function timer() {
+    let strSec = "", strMin = "", strClock = "";
+
+    second++;
+    strSec += second;
+
+    if (second > 60) {
+        minute++;
+        second = 0;
+        strSec = "0";
+    }
+    strMin += minute;
+    return "0" + strMin + ":" + strSec;
+}
+
+function restartTimer() {
+    timerStr = "00:00";
+    minute = 0;
+    second = 0;
+    document.getElementById('timer').innerHTML = timerStr;
+    clearInterval(timerIntervalId);
+    timerIntervalId = startIntervalTimer();
+}
+
+
+movesIntervalId = startIntervalMoves();
+timerIntervalId = startIntervalTimer();
+
+function startIntervalMoves() {
+    return setInterval(() => {
+        document.getElementById('moves').innerHTML = moves;
+    }, TIMER_MOVE);
+}
+
+function startIntervalTimer() {
+    return setInterval(() => {
+        timerStr = timer();
+        document.getElementById('timer').innerHTML = timerStr;
+    }, MILLI_SECOND);
+}
 
 document.getElementById("show_user").innerHTML = USER_NAME;
 

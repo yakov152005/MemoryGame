@@ -9,10 +9,16 @@
 <body>
 <div id="game-board" class="game-board"></div>
 <br>
-<h6>Play now: <p id="show_user"></p></h6>
-<h6>Moves: <p id="moves"></p></h6>
-<button id="backToMain" class="btn btn-secondary mt-3">Back to Main</button>
-<button id="restart" class="btn btn-secondary mt-3">Restart</button>
+
+<div id="game-over-board" class="game-over-board">
+    <h6>Play now:<p id="show_user"></p>
+    Moves:<p id="moves"></p>
+    Timer:<p id="timer"></p></h6>
+
+    <button id="backToMain" class="btn btn-secondary mt-3">Back to Main</button>
+    <button id="restart" class="btn btn-secondary mt-3">Restart</button>
+</div>
+
 
 <script type="module" src="./scripts/game.js"></script>
 </body>
